@@ -1,0 +1,13 @@
+def helb_tracker():
+    print("=== HELB LOAN TRACKER ===")
+    name = input("Ingiza jina lako: ")
+    reg_no = input("Ingiza Reg No: ")
+    loan_amount = float(input("Loan ulipewa ngapi? "))
+    paid = float(input("Umeshalipa ngapi? "))
+    balance = loan_amount - paid
+    print("\n--- REPORT ---")
+    print(f"Jina: {name}")
+    print(f"Balance: {balance}")
+
+if __name__ == "__main__":
+    helb_tracker()
