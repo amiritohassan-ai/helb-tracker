@@ -1,49 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="sw">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HELB Tracker</title>
+<title>HELB Tracker - Pesa Yangu</title>
 <style>
-body { font-family: sans-serif; background: #f0f2f5; padding: 15px; max-width: 400px; margin: auto; }
-.card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 15px; }
-.balance { font-size: 30px; font-weight: bold; text-align: center; color: #0d652d; }
-.label { text-align: center; color: gray; font-size: 13px; }
-input, select, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; }
-button { background: #1a73e8; color: white; border: none; font-weight: bold; }
-.setup { background: #fff8e1; border: 2px dashed #ffb300; }
-.item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 14px;}
+body{font-family:Arial;background:#f0f4f8;margin:0;padding:15px}
+.header{background:#004aad;color:white;padding:20px;border-radius:15px;text-align:center}
+.card{background:white;padding:20px;border-radius:15px;margin-top:15px;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+.balance{font-size:32px;font-weight:bold;color:#004aad}
+input,select{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box}
+button{width:100%;padding:14px;background:#004aad;color:white;border:none;border-radius:10px;font-weight:bold;font-size:16px;margin-top:10px}
+.btn-whatsapp{background:#25D366}
+.hist-item{border-bottom:1px solid #eee;padding:10px 0;display:flex;justify-content:space-between}
+.small{color:#666;font-size:13px}
 </style>
 </head>
 <body>
-<div class="card setup">
-<h3>👋 Weka HELB Yako</h3>
-<input type="number" id="totalInput" placeholder="Mfano: 30000">
-<button onclick="setTotal()">Weka Pesa Yangu</button>
+<div class="header">
+<h2>🎓 HELB Tracker</h2>
+<p>Track HELB yako kama PRO</p>
+<div class="balance">KES <span id="totalBal">0</span></div>
+<p class="small" id="totalLabel">Jumla uliyoweka</p>
 </div>
+
 <div class="card">
-<div class="label">PESA YAKO</div>
-<div class="balance" id="totalDisplay">KES 30,000</div>
-<div class="label">BALANCE</div>
-<div class="balance" id="balanceDisplay" style="color:#1a73e8;">KES 30,000</div>
+<h4>Weka HELB Yako</h4>
+<select id="type">
+<option value="in">💰 Pesa Imeingia (HELB)</option>
+<option value="out">💸 Matumizi</option>
+</select>
+<input type="number" id="amount" placeholder="Kiasi e.g. 10000">
+<input type="text" id="desc" placeholder="Kwa nini? e.g. Rent, Chakula">
+<button onclick="addTx()">Ongeza +</button>
+<button onclick="setTotal()" style="background:#ff9800;">Weka Jumla ya Kwanza</button>
 </div>
-<div class="card">
-<select id="type"><option value="fees">Fees</option><option value="rent">Rent</option><option value="food">Food</option><option value="repayment">Kulipa HELB</option></select>
-<input type="number" id="amount" placeholder="Kiasi 5000">
-<input type="text" id="note" placeholder="Maelezo">
-<button onclick="addTx()">Ongeza</button>
-</div>
+
 <div class="card">
 <h4>Historia</h4>
-<div id="history">Hakuna bado</div>
+<div id="history">Hakuna data bado</div>
 </div>
+
+<div class="card">
+<button class="btn-whatsapp" onclick="shareWA()">📲 Share WhatsApp - Waambie Marafiki</button>
+<p class="small" style="text-align:center;margin-top:10px;">Website: amiritohassan-ai.github.io/helb-tracker</p>
+</div>
+
 <script>
-let total=localStorage.getItem('helb_total')?parseInt(localStorage.getItem('helb_total')):30000;
+let total=localStorage.getItem('helb_total')?parseFloat(localStorage.getItem('helb_total')):0;
 let tx=JSON.parse(localStorage.getItem('helb_tx')||'[]');
-function save(){localStorage.setItem('helb_total',total);localStorage.setItem('helb_tx',JSON.stringify(tx));render();}
-function setTotal(){let v=parseInt(document.getElementById('totalInput').value);if(!v)return alert('Weka pesa');total=v;save();document.getElementById('totalInput').value='';}
-function render(){let spent=tx.reduce((s,t)=>s+t.amount,0);document.getElementById('totalDisplay').innerText='KES '+total.toLocaleString();document.getElementById('balanceDisplay').innerText='KES '+(total-spent).toLocaleString();let h=document.getElementById('history');if(!tx.length){h.innerHTML='Hakuna bado';return;}h.innerHTML=tx.slice().reverse().map(t=>`<div class="item"><span>${t.type} ${t.note||''}</span><span>-${t.amount}</span></div>`).join('');}
-function addTx(){let a=parseInt(document.getElementById('amount').value);let ty=document.getElementById('type').value;let n=document.getElementById('note').value;if(!a)return alert('Weka kiasi');tx.push({amount:a,type:ty,note:n});document.getElementById('amount').value='';document.getElementById('note').value='';save();}
+function save(){localStorage.setItem('helb_total',total);localStorage.setItem('helb_tx',JSON.stringify(tx));}
+function setTotal(){let a=prompt('Weka jumla ya HELB uliyonayo sasa (e.g. 40000)');if(!a)return;total=parseFloat(a);save();render();}
+function render(){document.getElementById('totalBal').innerText=total.toLocaleString();let h=document.getElementById('history');if(tx.length==0){h.innerHTML='Hakuna data bado';return;}h.innerHTML='';[...tx].reverse().forEach(t=>{let d=document.createElement('div');d.className='hist-item';d.innerHTML=`<span>${t.desc} <br><small>${t.date}</small></span><span style="color:${t.type=='in'?'green':'red'}">${t.type=='in'?'+':'-'}${t.amount}</span>`;h.appendChild(d);});}
+function addTx(){let a=parseFloat(document.getElementById('amount').value);let desc=document.getElementById('desc').value||document.getElementById('type').value;let type=document.getElementById('type').value;if(!a)return alert('Weka kiasi!');if(type=='in')total+=a;else total-=a;tx.push({amount:a,desc:desc,type:type,date:new Date().toLocaleDateString()});save();render();document.getElementById('amount').value='';document.getElementById('desc').value='';}
+function shareWA(){let msg=`Nimepata App poa ya ku-track HELB! 🎓💰\nTumia hii: https://amiritohassan-ai.github.io/helb-tracker/\nInasaidia kujua pesa inaishia wapi!`;window.open('https://wa.me/?text='+encodeURIComponent(msg), '_blank');}
 render();
 </script>
 </body>
