@@ -1,60 +1,56 @@
 <!DOCTYPE html>
 <html lang="sw">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HELB Tracker - Pesa Yangu</title>
-<style>
-body{font-family:Arial;background:#f0f4f8;margin:0;padding:15px}
-.header{background:#004aad;color:white;padding:20px;border-radius:15px;text-align:center}
-.card{background:white;padding:20px;border-radius:15px;margin-top:15px;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
-.balance{font-size:32px;font-weight:bold;color:#004aad}
-input,select{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box}
-button{width:100%;padding:14px;background:#004aad;color:white;border:none;border-radius:10px;font-weight:bold;font-size:16px;margin-top:10px}
-.btn-whatsapp{background:#25D366}
-.hist-item{border-bottom:1px solid #eee;padding:10px 0;display:flex;justify-content:space-between}
-.small{color:#666;font-size:13px}
-</style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HELB Tracker Kenya 2025 | Track Loan Yako</title>
+<meta name="description" content="Track HELB yako 2025 - Angalia disbursement, balance. Tool ya bure kwa wanafunzi Kenya.">
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<div class="header">
-<h2>🎓 HELB Tracker</h2>
-<p>Track HELB yako kama PRO</p>
-<div class="balance">KES <span id="totalBal">0</span></div>
-<p class="small" id="totalLabel">Jumla uliyoweka</p>
+<body class="bg-slate-50">
+<header class="bg-gradient-to-r from-blue-800 to-indigo-700 text-white p-4">
+<div class="max-w-5xl mx-auto flex justify-between"><h1 class="font-extrabold">🎓 HELB Tracker KE</h1><span class="bg-white/20 px-3 py-1 rounded-full text-xs">2025 Edition</span></div>
+</header>
+<div class="max-w-5xl mx-auto p-4">
+<div class="bg-white border-dashed border p-2 text-center text-[10px] text-slate-400 rounded my-3">AdSense Top Banner</div>
+<div class="grid md:grid-cols-3 gap-4">
+<div class="md:col-span-2 space-y-4">
+<div class="bg-white rounded-2xl shadow-lg p-5 border">
+<h2 class="font-bold text-lg">Track HELB Yako Kama PRO</h2>
+<p class="text-sm text-slate-500 mb-4">Weka pesa uliyopewa na HELB</p>
+<div class="grid grid-cols-2 gap-3">
+<div><label class="text-xs font-bold">Jina</label><input id="name" class="w-full border rounded-lg p-2.5 mt-1" placeholder="Hassan"></div>
+<div><label class="text-xs font-bold">Mwaka</label><select id="year" class="w-full border rounded-lg p-2.5 mt-1"><option>2025/2026</option><option>2024/2025</option></select></div>
+<div><label class="text-xs font-bold">Aina ya Loan</label><select id="type" class="w-full border rounded-lg p-2.5 mt-1"><option>Undergraduate</option><option>TVET</option><option>Postgrad</option></select></div>
+<div><label class="text-xs font-bold">Jumla Uliyoomba</label><input id="allocated" type="number" class="w-full border rounded-lg p-2.5 mt-1" placeholder="37000"></div>
+<div><label class="text-xs font-bold">Tuition Imeingia</label><input id="tuition" type="number" class="w-full border rounded-lg p-2.5 mt-1" placeholder="20000"></div>
+<div><label class="text-xs font-bold">Upkeep Imeingia</label><input id="upkeep" type="number" class="w-full border rounded-lg p-2.5 mt-1" placeholder="15000"></div>
 </div>
-
-<div class="card">
-<h4>Weka HELB Yako</h4>
-<select id="type">
-<option value="in">💰 Pesa Imeingia (HELB)</option>
-<option value="out">💸 Matumizi</option>
-</select>
-<input type="number" id="amount" placeholder="Kiasi e.g. 10000">
-<input type="text" id="desc" placeholder="Kwa nini? e.g. Rent, Chakula">
-<button onclick="addTx()">Ongeza +</button>
-<button onclick="setTotal()" style="background:#ff9800;">Weka Jumla ya Kwanza</button>
+<button onclick="calc()" class="w-full mt-5 bg-blue-700 text-white py-3 rounded-xl font-bold">Ongeza + Hesabu</button>
 </div>
-
-<div class="card">
-<h4>Historia</h4>
-<div id="history">Hakuna data bado</div>
+<div id="result" class="hidden bg-white rounded-2xl shadow-lg p-5 border">
+<h3 class="font-bold">Matokeo</h3>
+<div class="grid grid-cols-3 gap-2 mt-3 text-center text-xs">
+<div class="bg-blue-50 p-3 rounded-xl"><p>Allocated</p><p id="rAlloc" class="font-bold"></p></div>
+<div class="bg-green-50 p-3 rounded-xl"><p>Received</p><p id="rRec" class="font-bold text-green-700"></p></div>
+<div class="bg-orange-50 p-3 rounded-xl"><p>Balance</p><p id="rBal" class="font-bold text-orange-600"></p></div>
 </div>
-
-<div class="card">
-<button class="btn-whatsapp" onclick="shareWA()">📲 Share WhatsApp - Waambie Marafiki</button>
-<p class="small" style="text-align:center;margin-top:10px;">Website: amiritohassan-ai.github.io/helb-tracker</p>
+<div class="mt-4"><div class="w-full bg-slate-200 rounded-full h-3"><div id="bar" class="h-3 rounded-full bg-blue-600" style="width:0%"></div></div><p id="msg" class="text-xs mt-2"></p></div>
 </div>
-
+<div class="bg-white border-dashed border p-2 text-center text-[10px] text-slate-400 rounded">AdSense In-Article</div>
+<div class="bg-white rounded-2xl shadow p-5 text-sm"><h3 class="font-bold">FAQ</h3><p class="mt-2"><b>HELB inachukua muda gani?</b> 2-4 weeks.</p><p><b>Upkeep ni lini?</b> Baada ya tuition.</p></div>
+</div>
+<div class="space-y-3">
+<div class="bg-white rounded-2xl shadow p-4"><h4 class="font-bold text-sm">About Us</h4><p class="text-xs text-slate-600 mt-2">HELB Tracker KE ni tool ya bure ya wanafunzi wa Kenya. Data inabaki kwenye simu yako.</p></div>
+<div class="bg-white rounded-2xl shadow p-4"><h4 class="font-bold text-sm">Contact</h4><p class="text-xs mt-2">amiritohassan.ai@gmail.com</p></div>
+<div class="bg-white border-dashed border p-8 text-center text-[10px] text-slate-400 rounded-2xl">AdSense Sidebar 300x250</div>
+</div>
+</div>
+<footer class="text-center py-6 text-[11px] text-slate-500"><a href="#" onclick="alert('Privacy: Hatuchukui data yako. AdSense uses cookies.')" class="underline">Privacy Policy</a> | Contact | Disclaimer<br>© 2025 HELB Tracker KE</footer>
+</div>
 <script>
-let total=localStorage.getItem('helb_total')?parseFloat(localStorage.getItem('helb_total')):0;
-let tx=JSON.parse(localStorage.getItem('helb_tx')||'[]');
-function save(){localStorage.setItem('helb_total',total);localStorage.setItem('helb_tx',JSON.stringify(tx));}
-function setTotal(){let a=prompt('Weka jumla ya HELB uliyonayo sasa (e.g. 40000)');if(!a)return;total=parseFloat(a);save();render();}
-function render(){document.getElementById('totalBal').innerText=total.toLocaleString();let h=document.getElementById('history');if(tx.length==0){h.innerHTML='Hakuna data bado';return;}h.innerHTML='';[...tx].reverse().forEach(t=>{let d=document.createElement('div');d.className='hist-item';d.innerHTML=`<span>${t.desc} <br><small>${t.date}</small></span><span style="color:${t.type=='in'?'green':'red'}">${t.type=='in'?'+':'-'}${t.amount}</span>`;h.appendChild(d);});}
-function addTx(){let a=parseFloat(document.getElementById('amount').value);let desc=document.getElementById('desc').value||document.getElementById('type').value;let type=document.getElementById('type').value;if(!a)return alert('Weka kiasi!');if(type=='in')total+=a;else total-=a;tx.push({amount:a,desc:desc,type:type,date:new Date().toLocaleDateString()});save();render();document.getElementById('amount').value='';document.getElementById('desc').value='';}
-function shareWA(){let msg=`Nimepata App poa ya ku-track HELB! 🎓💰\nTumia hii: https://amiritohassan-ai.github.io/helb-tracker/\nInasaidia kujua pesa inaishia wapi!`;window.open('https://wa.me/?text='+encodeURIComponent(msg), '_blank');}
-render();
+function calc(){const a=parseFloat(document.getElementById('allocated').value)||0;const t=parseFloat(document.getElementById('tuition').value)||0;const u=parseFloat(document.getElementById('upkeep').value)||0;const tot=t+u;if(!a){alert('Weka Jumla');return;}localStorage.setItem('helb_v2',JSON.stringify({a,t,u}));show(a,tot);}
+function show(a,tot){document.getElementById('result').classList.remove('hidden');document.getElementById('rAlloc').innerText='Ksh '+a;document.getElementById('rRec').innerText='Ksh '+tot;document.getElementById('rBal').innerText='Ksh '+(a-tot);document.getElementById('bar').style.width=Math.min(100,Math.round(tot/a*100))+'%';document.getElementById('msg').innerText=tot>=a?'Hongera! Imeingia ✅':'Bado - angalia HEF portal';}
+window.onload=()=>{try{const d=JSON.parse(localStorage.getItem('helb_v2'));if(d){document.getElementById('allocated').value=d.a;document.getElementById('tuition').value=d.t;document.getElementById('upkeep').value=d.u;show(d.a,d.t+d.u);}}catch(e){}}
 </script>
 </body>
 </html>
