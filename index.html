@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HELB Tracker</title>
+<style>
+body { font-family: sans-serif; background: #f0f2f5; padding: 15px; max-width: 400px; margin: auto; }
+.card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 15px; }
+.balance { font-size: 30px; font-weight: bold; text-align: center; color: #0d652d; }
+.label { text-align: center; color: gray; font-size: 13px; }
+input, select, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; }
+button { background: #1a73e8; color: white; border: none; font-weight: bold; }
+.setup { background: #fff8e1; border: 2px dashed #ffb300; }
+.item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 14px;}
+</style>
+</head>
+<body>
+<div class="card setup">
+<h3>👋 Weka HELB Yako</h3>
+<input type="number" id="totalInput" placeholder="Mfano: 30000">
+<button onclick="setTotal()">Weka Pesa Yangu</button>
+</div>
+<div class="card">
+<div class="label">PESA YAKO</div>
+<div class="balance" id="totalDisplay">KES 30,000</div>
+<div class="label">BALANCE</div>
+<div class="balance" id="balanceDisplay" style="color:#1a73e8;">KES 30,000</div>
+</div>
+<div class="card">
+<select id="type"><option value="fees">Fees</option><option value="rent">Rent</option><option value="food">Food</option><option value="repayment">Kulipa HELB</option></select>
+<input type="number" id="amount" placeholder="Kiasi 5000">
+<input type="text" id="note" placeholder="Maelezo">
+<button onclick="addTx()">Ongeza</button>
+</div>
+<div class="card">
+<h4>Historia</h4>
+<div id="history">Hakuna bado</div>
+</div>
+<script>
+let total=localStorage.getItem('helb_total')?parseInt(localStorage.getItem('helb_total')):30000;
+let tx=JSON.parse(localStorage.getItem('helb_tx')||'[]');
+function save(){localStorage.setItem('helb_total',total);localStorage.setItem('helb_tx',JSON.stringify(tx));render();}
+function setTotal(){let v=parseInt(document.getElementById('totalInput').value);if(!v)return alert('Weka pesa');total=v;save();document.getElementById('totalInput').value='';}
+function render(){let spent=tx.reduce((s,t)=>s+t.amount,0);document.getElementById('totalDisplay').innerText='KES '+total.toLocaleString();document.getElementById('balanceDisplay').innerText='KES '+(total-spent).toLocaleString();let h=document.getElementById('history');if(!tx.length){h.innerHTML='Hakuna bado';return;}h.innerHTML=tx.slice().reverse().map(t=>`<div class="item"><span>${t.type} ${t.note||''}</span><span>-${t.amount}</span></div>`).join('');}
+function addTx(){let a=parseInt(document.getElementById('amount').value);let ty=document.getElementById('type').value;let n=document.getElementById('note').value;if(!a)return alert('Weka kiasi');tx.push({amount:a,type:ty,note:n});document.getElementById('amount').value='';document.getElementById('note').value='';save();}
+render();
+</script>
+</body>
+</html>
