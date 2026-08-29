@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="sw">
 <head>
-<<<<<<< HEAD
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HELB Tracker - Pesa Yangu</title>
@@ -39,7 +38,6 @@
 </div>
 
 <button onclick="shareWA()" class="w-full bg-[#25D366] text-white p-3 rounded-xl font-bold">📤 Share WhatsApp</button>
-=======
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HELB Tracker Kenya 2025 | Track Loan Yako</title>
 <meta name="description" content="Track HELB yako 2025 - Angalia disbursement, balance. Tool ya bure kwa wanafunzi Kenya.">
@@ -85,10 +83,8 @@
 </div>
 </div>
 <footer class="text-center py-6 text-[11px] text-slate-500"><a href="#" onclick="alert('Privacy: Hatuchukui data yako. AdSense uses cookies.')" class="underline">Privacy Policy</a> | Contact | Disclaimer<br>© 2025 HELB Tracker KE</footer>
->>>>>>> 8c5fa4500a5d1146877d570c2ebeb6a891bbca53
 </div>
 <script>
-<<<<<<< HEAD
 let total=localStorage.getItem('h_total')?+localStorage.getItem('h_total'):0;
 let exps=JSON.parse(localStorage.getItem('h_exps')||'[]');
 function update(){let spent=exps.reduce((a,b)=>a+b.amt,0);let bal=total-spent;document.getElementById('balance').innerText='KES '+bal.toLocaleString();let days=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate()-new Date().getDate();if(days<1)days=1;document.getElementById('daily').innerText='Daily Budget: KES '+Math.floor(bal/days)+' for '+days+' days';let h='';[...exps].reverse().forEach(e=>h+=`<div class="flex justify-between border-b py-2 text-sm"><span>${e.cat}</span><b>-${e.amt}</b></div>`);document.getElementById('list').innerHTML=h;localStorage.setItem('h_total',total);localStorage.setItem('h_exps',JSON.stringify(exps));}
@@ -96,11 +92,9 @@ function setTotal(){let t=+document.getElementById('total').value;if(!t)return a
 function addExp(){let c=document.getElementById('cat').value,a=+document.getElementById('amt').value;if(!c||!a)return;exps.push({cat:c,amt:a});document.getElementById('cat').value='';document.getElementById('amt').value='';update();}
 function shareWA(){let spent=exps.reduce((a,b)=>a+b.amt,0);let bal=total-spent;let txt=`🔥 HELB Tracker Report 🔥%0ATotal: ${total}%0ASpent: ${spent}%0ABalance: ${bal}%0ATrack kwa: https://${location.host}`;window.open('https://wa.me/?text='+txt,'_blank');}
 update();
-=======
 function calc(){const a=parseFloat(document.getElementById('allocated').value)||0;const t=parseFloat(document.getElementById('tuition').value)||0;const u=parseFloat(document.getElementById('upkeep').value)||0;const tot=t+u;if(!a){alert('Weka Jumla');return;}localStorage.setItem('helb_v2',JSON.stringify({a,t,u}));show(a,tot);}
 function show(a,tot){document.getElementById('result').classList.remove('hidden');document.getElementById('rAlloc').innerText='Ksh '+a;document.getElementById('rRec').innerText='Ksh '+tot;document.getElementById('rBal').innerText='Ksh '+(a-tot);document.getElementById('bar').style.width=Math.min(100,Math.round(tot/a*100))+'%';document.getElementById('msg').innerText=tot>=a?'Hongera! Imeingia ✅':'Bado - angalia HEF portal';}
 window.onload=()=>{try{const d=JSON.parse(localStorage.getItem('helb_v2'));if(d){document.getElementById('allocated').value=d.a;document.getElementById('tuition').value=d.t;document.getElementById('upkeep').value=d.u;show(d.a,d.t+d.u);}}catch(e){}}
->>>>>>> 8c5fa4500a5d1146877d570c2ebeb6a891bbca53
 </script>
 </body>
 </html>
